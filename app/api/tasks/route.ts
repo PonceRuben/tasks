@@ -29,14 +29,14 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
     try {
-    const taskId = parseInt(params.id, 10);
+        const { id } = await req.json();
 
-    if (isNaN(taskId)) {
+    if (!id || isNaN(id)) {
         return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
     }
 
     await prisma.task.delete({
-        where: { id: taskId },
+        where: { id: Number(id) },
     });
 
     return NextResponse.json({ message: 'Tarea eliminada correctamente' }, { status: 200 });
